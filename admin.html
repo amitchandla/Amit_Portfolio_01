@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin · Backup — Amit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --bg:#050B14; --panel:rgba(13,25,42,.6); --border:rgba(148,180,214,.16);
+    --cyan:#22D3EE; --blue:#3B82F6; --text:#E7ECF3; --muted:#93A2B8;
+    --grad:linear-gradient(120deg,var(--blue),var(--cyan));
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;padding:40px 20px;
+  }
+  .wrap{max-width:960px;margin:0 auto;}
+  h1{font-size:1.8rem;margin-bottom:6px;}
+  h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{color:var(--muted);margin-bottom:30px;font-size:.92rem;}
+  .card{
+    background:var(--panel);border:1px solid var(--border);border-radius:16px;
+    padding:26px;backdrop-filter:blur(14px);margin-bottom:24px;
+  }
+  .row{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:50px;
+    font-weight:600;font-size:.88rem;border:none;cursor:pointer;transition:.25s ease;
+  }
+  .btn-primary{background:var(--grad);color:#00131a;}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text);}
+  .btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+  table{width:100%;border-collapse:collapse;margin-top:20px;font-size:.85rem;}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);}
+  th{color:var(--muted);font-family:'Space Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;}
+  td{color:var(--text);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .status{color:var(--muted);font-size:.88rem;}
+  .status.err{color:#f87171;}
+  .status.ok{color:#34d399;}
+  a.back{color:var(--cyan);font-size:.85rem;display:inline-block;margin-bottom:20px;}
+  .empty{color:var(--muted);text-align:center;padding:40px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="index.html" class="back"><i class="fa-solid fa-arrow-left"></i> Back to site</a>
+  <h1>Admin <span>Backup</span></h1>
+  <p class="sub">Export a backup of every message submitted through your contact form.</p>
+
+  <div class="card" id="gate">
+    <p class="status" id="gateStatus">Checking your session...</p>
+  </div>
+
+  <div class="card" id="panel" style="display:none;">
+    <div class="row">
+      <button class="btn btn-primary" id="refreshBtn"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      <button class="btn btn-outline" id="csvBtn"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+      <button class="btn btn-outline" id="jsonBtn"><i class="fa-solid fa-file-code"></i> Export JSON</button>
+    </div>
+    <p class="status" id="loadStatus"></p>
+    <div id="tableWrap"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+  /* Only this email can see the backup panel — change to your own email. */
+  const ADMIN_EMAIL = "Amitchandla2001@gmail.com";
+
+  const gate = document.getElementById('gate');
+  const gateStatus = document.getElementById('gateStatus');
+  const panel = document.getElementById('panel');
+  const loadStatus = document.getElementById('loadStatus');
+  const tableWrap = document.getElementById('tableWrap');
+
+  let rows = [];
+
+  async function init() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session?.user) {
+      gateStatus.innerHTML = 'You need to be logged in. Go to the homepage, click <b>Sign in</b>, then come back here.';
+      gateStatus.className = 'status err';
+      return;
+    }
+    if (session.user.email !== ADMIN_EMAIL) {
+      gateStatus.textContent = 'This account does not have access to the backup panel.';
+      gateStatus.className = 'status err';
+      return;
+    }
+
+    gate.style.display = 'none';
+    panel.style.display = 'block';
+    loadMessages();
+  }
+
+  async function loadMessages() {
+    loadStatus.textContent = 'Loading messages...';
+    loadStatus.className = 'status';
+
+    const { data, error } = await supabaseClient
+      .from('messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      loadStatus.textContent = 'Could not load messages: ' + error.message;
+      loadStatus.className = 'status err';
+      return;
+    }
+
+    rows = data || [];
+    loadStatus.textContent = `${rows.length} message(s) loaded.`;
+    loadStatus.className = 'status ok';
+    renderTable();
+  }
+
+  function renderTable() {
+    if (!rows.length) {
+      tableWrap.innerHTML = '<p class="empty">No messages yet.</p>';
+      return;
+    }
+    const cols = ['created_at', 'name', 'email', 'subject', 'message'];
+    let html = '<table><thead><tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+    rows.forEach(r => {
+      html += '<tr>' + cols.map(c => `<td title="${(r[c] ?? '').toString().replace(/"/g, '&quot;')}">${r[c] ?? ''}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table>';
+    tableWrap.innerHTML = html;
+  }
+
+  function downloadBlob(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function toCSV(data) {
+    if (!data.length) return '';
+    const cols = Object.keys(data[0]);
+    const escape = v => `"${(v ?? '').toString().replace(/"/g, '""')}"`;
+    const lines = [cols.join(',')];
+    data.forEach(row => lines.push(cols.map(c => escape(row[c])).join(',')));
+    return lines.join('\n');
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', loadMessages);
+
+  document.getElementById('csvBtn').addEventListener('click', () => {
+    if (!rows.length) return;
+    downloadBlob(toCSV(rows), `messages-backup-${Date.now()}.csv`, 'text/csv');
+  });
+
+  document.getElementById('jsonBtn').addEventListener('click', () => {
+    if (!rows.length) return;
+    downloadBlob(JSON.stringify(rows, null, 2), `messages-backup-${Date.now()}.json`, 'application/json');
+  });
+
+  init();
+</script>
+</body>
+</html>
