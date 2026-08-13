@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amit | Data Analyst &amp; AI Enthusiast</title>
+<meta name="description" content="Amit — Data Analyst, AI Enthusiast, Prompt Engineer &amp; Web Developer portfolio. AI-assisted data analysis, dashboards, automation and prompt engineering.">
+<meta name="theme-color" content="#050B14">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- AOS Animation -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div id="loader">
+  <div class="loader-inner">
+    <span class="loader-bracket">&lt;</span>
+    <span class="loader-text">Amit</span>
+    <span class="loader-bracket">/&gt;</span>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
+
+<!-- ============ CUSTOM CURSOR ============ -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- ============ PARTICLE / DATA-GRID CANVAS ============ -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ============ NAVBAR ============ -->
+<header class="navbar" id="navbar">
+  <div class="nav-wrap">
+    <a href="#home" class="logo">Amit<span class="dot">.</span></a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#education" class="nav-link">Education</a>
+      <a href="#certifications" class="nav-link">Certifications</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme" title="Toggle dark / light">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+
+      <!-- Auth area: swaps between "Sign in" and user chip -->
+      <div id="authArea">
+        <button class="btn btn-ghost" id="openAuthBtn"><i class="fa-solid fa-user"></i> Sign in</button>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div class="hero-copy" data-aos="fade-right">
+      <p class="eyebrow"><span class="pulse-dot"></span> Available for Data Analyst Internships</p>
+      <h1 class="hero-title">
+        Hi, I'm <span class="grad-text">Amit</span>
+      </h1>
+      <h2 class="hero-role">
+        <span id="typed"></span><span class="cursor-blink">|</span>
+      </h2>
+      <p class="hero-desc">
+        I turn raw data into clear decisions — blending AI-assisted analysis, prompt engineering
+        and clean dashboards. Currently sharpening my craft at Bharat AI Academy, and looking
+        for a Data Analyst Intern role where I can put that thinking to work.
+      </p>
+
+      <div class="hero-cta">
+        <a href="assets/Amit_Resume.pdf" download class="btn btn-primary">
+          <i class="fa-solid fa-download"></i> Download Resume
+        </a>
+        <a href="#contact" class="btn btn-outline">
+          <i class="fa-solid fa-paper-plane"></i> Hire Me
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="counter" data-target="12">0</span><span class="stat-plus">+</span>
+          <p>AI Tools Mastered</p>
+        </div>
+        <div class="stat">
+          <span class="counter" data-target="5">0</span><span class="stat-plus">+</span>
+          <p>Projects Built</p>
+        </div>
+        <div class="stat">
+          <span class="counter" data-target="100">0</span><span class="stat-plus">%</span>
+          <p>Learning Mode: On</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual" data-aos="fade-left">
+      <div class="orbit-ring r1"></div>
+      <div class="orbit-ring r2"></div>
+
+      <div class="profile-card glass">
+        <div class="profile-img-wrap">
+          <img src="https://api.dicebear.com/7.x/initials/svg?seed=Amit&backgroundColor=1e3a5f,0891b2&backgroundType=gradientLinear" alt="Amit profile picture" class="profile-img">
+        </div>
+        <p class="profile-name">Amit</p>
+        <p class="profile-role">Data Analyst · AI Enthusiast</p>
+      </div>
+
+      <!-- Signature element: floating live-data dashboard widget -->
+      <div class="mini-dash glass float-1">
+        <div class="mini-dash-head">
+          <span class="dash-dot red"></span><span class="dash-dot yellow"></span><span class="dash-dot green"></span>
+          <span class="mini-dash-title">insights.live</span>
+        </div>
+        <svg viewBox="0 0 160 60" class="mini-chart">
+          <polyline points="0,45 20,35 40,40 60,20 80,28 100,10 120,18 140,5 160,15" class="mini-chart-line"/>
+        </svg>
+        <div class="mini-bars">
+          <span style="height:40%"></span><span style="height:70%"></span><span style="height:55%"></span>
+          <span style="height:90%"></span><span style="height:65%"></span><span style="height:80%"></span>
+        </div>
+      </div>
+
+      <div class="chip glass float-2"><i class="fa-solid fa-robot"></i> Prompt Engineering</div>
+      <div class="chip glass float-3"><i class="fa-solid fa-chart-line"></i> Power BI</div>
+    </div>
+  </div>
+
+  <a href="#about" class="scroll-down" aria-label="Scroll down"><i class="fa-solid fa-chevron-down"></i></a>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <p class="section-eyebrow" data-aos="fade-up">Get to know me</p>
+  <h2 class="section-title" data-aos="fade-up">About <span class="grad-text">Me</span></h2>
+
+  <div class="about-grid">
+    <div class="about-text" data-aos="fade-right">
+      <p>
+        I'm an aspiring <strong>Data Analyst</strong> and <strong>AI Enthusiast</strong>, currently
+        learning Artificial Intelligence at <strong>Bharat AI Academy</strong>. I work hands-on with
+        AI tools, prompt engineering, web development and data analytics — using them together to
+        solve real problems rather than treating them as separate skills.
+      </p>
+      <p>
+        I enjoy the moment a messy spreadsheet turns into a dashboard someone can actually act on.
+        That's the work I want to keep doing — as a <strong>Data Analyst Intern</strong>, applying
+        analytical thinking alongside AI-powered workflows.
+      </p>
+
+      <div class="about-info">
+        <div><i class="fa-solid fa-location-dot"></i> Bhiwani, Haryana, India</div>
+        <div><i class="fa-solid fa-graduation-cap"></i> Learning AI at Bharat AI Academy</div>
+        <div><i class="fa-solid fa-bullseye"></i> Goal: Data Analyst Internship</div>
+      </div>
+
+      <a href="#contact" class="btn btn-primary">Let's Talk <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="about-visual" data-aos="fade-left">
+      <div class="glass about-card">
+        <i class="fa-solid fa-database"></i>
+        <h3>Data Cleaning &amp; EDA</h3>
+        <p>Turning raw, messy datasets into structured, analysis-ready data.</p>
+      </div>
+      <div class="glass about-card">
+        <i class="fa-solid fa-brain"></i>
+        <h3>AI-Assisted Workflows</h3>
+        <p>Using ChatGPT, Claude &amp; Gemini to move faster without cutting corners.</p>
+      </div>
+      <div class="glass about-card">
+        <i class="fa-solid fa-chart-pie"></i>
+        <h3>Dashboards that talk</h3>
+        <p>Power BI dashboards built for decisions, not decoration.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section section-alt" id="skills">
+  <p class="section-eyebrow" data-aos="fade-up">What I work with</p>
+  <h2 class="section-title" data-aos="fade-up">My <span class="grad-text">Skills</span></h2>
+
+  <div class="skills-grid">
+
+    <div class="skill-block" data-aos="fade-up">
+      <h3><i class="fa-solid fa-chart-simple"></i> Data Analytics</h3>
+      <div class="skill-bar"><p>Data Cleaning &amp; Transformation<span>90%</span></p><div class="bar"><div class="fill" data-width="90"></div></div></div>
+      <div class="skill-bar"><p>Exploratory Data Analysis (EDA)<span>85%</span></p><div class="bar"><div class="fill" data-width="85"></div></div></div>
+      <div class="skill-bar"><p>Power BI Dashboards<span>88%</span></p><div class="bar"><div class="fill" data-width="88"></div></div></div>
+      <div class="skill-bar"><p>Data Storytelling<span>82%</span></p><div class="bar"><div class="fill" data-width="82"></div></div></div>
+    </div>
+
+    <div class="skill-block" data-aos="fade-up" data-aos-delay="100">
+      <h3><i class="fa-solid fa-robot"></i> AI &amp; Prompt Engineering</h3>
+      <div class="skill-bar"><p>Advanced Prompt Engineering<span>92%</span></p><div class="bar"><div class="fill" data-width="92"></div></div></div>
+      <div class="skill-bar"><p>ChatGPT / Claude AI / Gemini<span>90%</span></p><div class="bar"><div class="fill" data-width="90"></div></div></div>
+      <div class="skill-bar"><p>Claude Code / Copilot<span>80%</span></p><div class="bar"><div class="fill" data-width="80"></div></div></div>
+      <div class="skill-bar"><p>AI Automation Workflows<span>78%</span></p><div class="bar"><div class="fill" data-width="78"></div></div></div>
+    </div>
+
+    <div class="skill-block" data-aos="fade-up" data-aos-delay="200">
+      <h3><i class="fa-solid fa-code"></i> Web Development</h3>
+      <div class="skill-bar"><p>HTML5<span>92%</span></p><div class="bar"><div class="fill" data-width="92"></div></div></div>
+      <div class="skill-bar"><p>CSS3<span>88%</span></p><div class="bar"><div class="fill" data-width="88"></div></div></div>
+      <div class="skill-bar"><p>JavaScript<span>75%</span></p><div class="bar"><div class="fill" data-width="75"></div></div></div>
+      <div class="skill-bar"><p>Cloudflare Deployment<span>70%</span></p><div class="bar"><div class="fill" data-width="70"></div></div></div>
+    </div>
+  </div>
+
+  <div class="skill-cards" data-aos="fade-up">
+    <div class="skill-card glass"><i class="fa-solid fa-lightbulb"></i><p>Critical Thinking</p></div>
+    <div class="skill-card glass"><i class="fa-solid fa-puzzle-piece"></i><p>Problem Solving</p></div>
+    <div class="skill-card glass"><i class="fa-solid fa-magnifying-glass-chart"></i><p>Perplexity AI</p></div>
+    <div class="skill-card glass"><i class="fa-solid fa-microsoft"></i><p>Microsoft Copilot</p></div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section" id="projects">
+  <p class="section-eyebrow" data-aos="fade-up">Recent work</p>
+  <h2 class="section-title" data-aos="fade-up">My <span class="grad-text">Projects</span></h2>
+
+  <div class="filter-bar" data-aos="fade-up">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="ai">AI</button>
+    <button class="filter-btn" data-filter="web">Web Dev</button>
+    <button class="filter-btn" data-filter="data">Data</button>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card glass" data-category="ai web" data-aos="fade-up">
+      <div class="project-thumb">
+        <i class="fa-solid fa-house-medical"></i>
+      </div>
+      <div class="project-body">
+        <h3>AI-Powered Clinic Website</h3>
+        <p>A responsive healthcare website built with AI-assisted development — doctor
+          profiles, appointment booking, treatment info and contact forms, all wrapped
+          in a modern, user-friendly interface.</p>
+        <div class="tags">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Prompt Engineering</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn btn-sm btn-outline"><i class="fa-solid fa-eye"></i> Live Demo</a>
+          <a href="https://github.com/" target="_blank" rel="noopener" class="btn btn-sm btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card glass" data-category="data" data-aos="fade-up" data-aos-delay="100">
+      <div class="project-thumb">
+        <i class="fa-solid fa-chart-column"></i>
+      </div>
+      <div class="project-body">
+        <h3>Sales Performance Dashboard</h3>
+        <p>Power BI dashboard cleaning and visualising retail sales data — trend lines,
+          regional breakdowns and KPI cards designed for quick decision-making.</p>
+        <div class="tags">
+          <span>Power BI</span><span>EDA</span><span>Data Cleaning</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn btn-sm btn-outline"><i class="fa-solid fa-eye"></i> Live Demo</a>
+          <a href="https://github.com/" target="_blank" rel="noopener" class="btn btn-sm btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card glass" data-category="ai" data-aos="fade-up" data-aos-delay="200">
+      <div class="project-thumb">
+        <i class="fa-solid fa-comments"></i>
+      </div>
+      <div class="project-body">
+        <h3>Prompt Engineering Playbook</h3>
+        <p>A curated set of tested prompt templates for ChatGPT, Claude and Gemini,
+          built around real analysis and content-generation workflows.</p>
+        <div class="tags">
+          <span>ChatGPT</span><span>Claude AI</span><span>Gemini</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn btn-sm btn-outline"><i class="fa-solid fa-eye"></i> Live Demo</a>
+          <a href="https://github.com/" target="_blank" rel="noopener" class="btn btn-sm btn-ghost"><i class="fa-brands fa-github"></i> GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section class="section section-alt" id="services">
+  <p class="section-eyebrow" data-aos="fade-up">How I can help</p>
+  <h2 class="section-title" data-aos="fade-up">My <span class="grad-text">Services</span></h2>
+
+  <div class="services-grid">
+    <div class="service-card glass" data-aos="fade-up">
+      <i class="fa-solid fa-chart-line"></i>
+      <h3>Data Analysis</h3>
+      <p>Cleaning, exploring and interpreting data to surface insights that matter.</p>
+    </div>
+    <div class="service-card glass" data-aos="fade-up" data-aos-delay="80">
+      <i class="fa-solid fa-table-cells-large"></i>
+      <h3>Dashboard Creation</h3>
+      <p>Power BI dashboards built around the questions your team actually asks.</p>
+    </div>
+    <div class="service-card glass" data-aos="fade-up" data-aos-delay="160">
+      <i class="fa-solid fa-gears"></i>
+      <h3>AI Automation</h3>
+      <p>Automating repetitive workflows with AI tools to save hours every week.</p>
+    </div>
+    <div class="service-card glass" data-aos="fade-up" data-aos-delay="240">
+      <i class="fa-solid fa-message"></i>
+      <h3>Prompt Engineering</h3>
+      <p>Designing reliable prompts that get consistent, high-quality output.</p>
+    </div>
+    <div class="service-card glass" data-aos="fade-up" data-aos-delay="320">
+      <i class="fa-solid fa-code"></i>
+      <h3>Website Development</h3>
+      <p>Clean, responsive websites — from landing pages to full portfolios.</p>
+    </div>
+    <div class="service-card glass" data-aos="fade-up" data-aos-delay="400">
+      <i class="fa-solid fa-people-arrows"></i>
+      <h3>AI Consulting</h3>
+      <p>Helping you figure out which AI tools actually fit your workflow.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDUCATION TIMELINE ============ -->
+<section class="section" id="education">
+  <p class="section-eyebrow" data-aos="fade-up">My journey</p>
+  <h2 class="section-title" data-aos="fade-up">Education &amp; <span class="grad-text">Learning Path</span></h2>
+
+  <div class="timeline">
+    <div class="timeline-item" data-aos="fade-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content glass">
+        <span class="timeline-year">2026 – Present</span>
+        <h3>Artificial Intelligence Program</h3>
+        <p>Bharat AI Academy — hands-on training in AI tools, prompt engineering and AI-assisted development.</p>
+      </div>
+    </div>
+    <div class="timeline-item" data-aos="fade-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content glass">
+        <span class="timeline-year">2021</span>
+        <h3>12th Standard (Arts)</h3>
+        <p>Haryana Board of School Education (HBSE)</p>
+      </div>
+    </div>
+    <div class="timeline-item" data-aos="fade-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content glass">
+        <span class="timeline-year">2019</span>
+        <h3>10th Standard</h3>
+        <p>Haryana Board of School Education (HBSE)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CERTIFICATIONS ============ -->
+<section class="section section-alt" id="certifications">
+  <p class="section-eyebrow" data-aos="fade-up">Proof of work</p>
+  <h2 class="section-title" data-aos="fade-up">My <span class="grad-text">Certifications</span></h2>
+
+  <div class="cert-grid">
+    <div class="cert-card glass" data-aos="fade-up">
+      <i class="fa-solid fa-certificate"></i>
+      <h3>Artificial Intelligence Fundamentals</h3>
+      <p>Bharat AI Academy · 2026</p>
+    </div>
+    <div class="cert-card glass" data-aos="fade-up" data-aos-delay="100">
+      <i class="fa-solid fa-certificate"></i>
+      <h3>Advanced Prompt Engineering</h3>
+      <p>Bharat AI Academy · 2026</p>
+    </div>
+    <div class="cert-card glass" data-aos="fade-up" data-aos-delay="200">
+      <i class="fa-solid fa-certificate"></i>
+      <h3>Data Analytics with Power BI</h3>
+      <p>Bharat AI Academy · 2026</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section class="section" id="testimonials">
+  <p class="section-eyebrow" data-aos="fade-up">Kind words</p>
+  <h2 class="section-title" data-aos="fade-up">Testimonials</h2>
+
+  <div class="testimonial-track" data-aos="fade-up">
+    <div class="testimonial-card glass">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>"Amit picked up our messy spreadsheet and turned it into a dashboard our whole team actually uses. Sharp, fast and easy to work with."</p>
+      <div class="testimonial-author">
+        <img src="https://api.dicebear.com/7.x/initials/svg?seed=Priya+Sharma&backgroundColor=0891b2" alt="Priya Sharma">
+        <div><h4>Priya Sharma</h4><span>Program Mentor, Bharat AI Academy</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card glass">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>"He genuinely understands prompt engineering — not just typing questions into ChatGPT. The clinic website project he shipped for us was clean and on time."</p>
+      <div class="testimonial-author">
+        <img src="https://api.dicebear.com/7.x/initials/svg?seed=Rohit+Verma&backgroundColor=3b82f6" alt="Rohit Verma">
+        <div><h4>Rohit Verma</h4><span>Project Lead</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card glass">
+      <i class="fa-solid fa-quote-left quote-icon"></i>
+      <p>"Curious, quick to learn, and always digging one level deeper into the data. Amit will be a strong hire for any analytics team."</p>
+      <div class="testimonial-author">
+        <img src="https://api.dicebear.com/7.x/initials/svg?seed=Neha+Kaushik&backgroundColor=818cf8" alt="Neha Kaushik">
+        <div><h4>Neha Kaushik</h4><span>Peer Reviewer</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section section-alt" id="contact">
+  <p class="section-eyebrow" data-aos="fade-up">Let's connect</p>
+  <h2 class="section-title" data-aos="fade-up">Get In <span class="grad-text">Touch</span></h2>
+
+  <div class="contact-grid">
+    <div class="contact-info" data-aos="fade-right">
+      <div class="contact-item glass">
+        <i class="fa-solid fa-phone"></i>
+        <div><h4>Phone</h4><a href="tel:+917015559332">+91 70155 59332</a></div>
+      </div>
+      <div class="contact-item glass">
+        <i class="fa-solid fa-envelope"></i>
+        <div><h4>Email</h4><a href="mailto:Amitchandla2001@gmail.com">Amitchandla2001@gmail.com</a></div>
+      </div>
+      <div class="contact-item glass">
+        <i class="fa-solid fa-location-dot"></i>
+        <div><h4>Location</h4><span>Bhiwani, Haryana, India</span></div>
+      </div>
+
+      <div class="map-wrap glass">
+        <iframe
+          title="Bhiwani, Haryana map"
+          src="https://maps.google.com/maps?q=Bhiwani,%20Haryana,%20India&t=&z=11&ie=UTF8&iwloc=&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+
+    <form class="contact-form glass" id="contactForm" data-aos="fade-left">
+      <h3>Send a message</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cf-name">Name</label>
+          <input type="text" id="cf-name" name="name" required placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label for="cf-email">Email</label>
+          <input type="email" id="cf-email" name="email" required placeholder="you@example.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="cf-subject">Subject</label>
+        <input type="text" id="cf-subject" name="subject" required placeholder="What's this about?">
+      </div>
+
+      <div class="form-group">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" rows="5" required placeholder="Tell me a bit more..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="cfSubmit">
+        <span class="btn-label"><i class="fa-solid fa-paper-plane"></i> Send Message</span>
+        <span class="btn-spinner"></span>
+      </button>
+
+      <p class="form-status" id="cfStatus" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-top">
+    <a href="#home" class="logo">Amit<span class="dot">.</span></a>
+    <p>Data Analyst · AI Enthusiast · Prompt Engineer · Web Developer</p>
+
+    <div class="social-icons">
+      <a href="https://linkedin.com/in/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+      <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://youtube.com/" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; <span id="year"></span> Amit. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ============ FLOATING BUTTONS ============ -->
+<a href="https://wa.me/917015559332?text=Hi%20Amit%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+   class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<a href="mailto:Amitchandla2001@gmail.com" class="email-float" aria-label="Email Amit" title="Email me">
+  <i class="fa-solid fa-envelope"></i>
+</a>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+<!-- ============ AUTH MODAL (Supabase) ============ -->
+<div class="modal-overlay" id="authOverlay">
+  <div class="modal glass" id="authModal">
+    <button class="modal-close" id="authClose" aria-label="Close">&times;</button>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-tab="login">Log In</button>
+      <button class="auth-tab" data-tab="signup">Sign Up</button>
+    </div>
+
+    <!-- LOGIN -->
+    <form class="auth-form" id="loginForm">
+      <div class="form-group">
+        <label for="li-email">Email</label>
+        <input type="email" id="li-email" required placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label for="li-password">Password</label>
+        <input type="password" id="li-password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      <p class="auth-status" id="loginStatus"></p>
+    </form>
+
+    <!-- SIGN UP -->
+    <form class="auth-form" id="signupForm" style="display:none;">
+      <div class="form-group">
+        <label for="su-name">Full name</label>
+        <input type="text" id="su-name" required placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label for="su-email">Email</label>
+        <input type="email" id="su-email" required placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label for="su-password">Password</label>
+        <input type="password" id="su-password" required placeholder="Minimum 6 characters" minlength="6">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      <p class="auth-status" id="signupStatus"></p>
+    </form>
+
+    <div class="auth-divider"><span>or continue with</span></div>
+
+    <button class="btn btn-outline btn-block" id="githubLoginBtn">
+      <i class="fa-brands fa-github"></i> Continue with GitHub
+    </button>
+  </div>
+</div>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
