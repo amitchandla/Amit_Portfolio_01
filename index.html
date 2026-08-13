@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amit Chandla — Data Analyst & AI Learner</title>
+<meta name="description" content="Portfolio of Amit Chandla — Data Analyst & AI enthusiast from Haryana, India.">
+
+<!--
+  ============================================================
+  SETUP REQUIRED — read before publishing
+  ============================================================
+  1. Create a free project at https://supabase.com
+  2. In Project Settings → API, copy your "Project URL" and
+     "anon public" key, and paste them into SUPABASE_URL and
+     SUPABASE_ANON_KEY below (search for "TODO: SUPABASE").
+  3. In the Supabase SQL editor, run:
+
+     create table contact_messages (
+       id uuid primary key default gen_random_uuid(),
+       name text not null,
+       phone text not null,
+       email text not null,
+       message text not null,
+       created_at timestamptz default now()
+     );
+     alter table contact_messages enable row level security;
+     create policy "Anyone can submit a message"
+       on contact_messages for insert
+       with check (true);
+
+  4. For email sign up/login: Authentication → Providers → Email
+     is on by default. That's it.
+  5. For phone sign up/login: Authentication → Providers → Phone,
+     turn it on and connect an SMS provider (Twilio, MessageBird,
+     etc.) — Supabase needs this to send OTP codes. Without this
+     step the phone tab will show an error when used.
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --bg:#0B1220;
+  --panel:#111A2C;
+  --panel-2:#16213A;
+  --line:#233252;
+  --text:#E7ECF5;
+  --muted:#8C9AB8;
+  --accent:#F5B942;
+  --accent-2:#5B8DEF;
+  --danger:#F26B6B;
+  --ok:#4ADE9C;
+  --radius:14px;
+  --display:'Space Grotesk',sans-serif;
+  --body:'Inter',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--body);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+img,svg{display:block;max-width:100%;}
+button{font-family:inherit;cursor:pointer;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.01em;}
+h2{font-size:clamp(28px,4vw,40px);margin-bottom:8px;}
+.section{padding:96px 0;border-top:1px solid var(--line);}
+.section-head{margin-bottom:48px;}
+.section-sub{color:var(--muted);max-width:560px;margin-top:8px;}
+
+/* focus visibility */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--accent);outline-offset:2px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+}
+
+/* ---------- header ---------- */
+header{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:rgba(11,18,32,.82);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px;}
+.logo{font-family:var(--mono);font-weight:500;font-size:15px;letter-spacing:.05em;}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{font-size:14px;color:var(--muted);transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.btn{
+  font-family:var(--body);font-weight:600;font-size:14px;
+  padding:10px 20px;border-radius:999px;border:1px solid var(--line);
+  display:inline-flex;align-items:center;gap:8px;transition:all .2s;background:transparent;color:var(--text);
+}
+.btn:hover{border-color:var(--accent);}
+.btn-solid{background:var(--accent);color:#1A1200;border-color:var(--accent);}
+.btn-solid:hover{filter:brightness(1.08);}
+.menu-toggle{display:none;background:none;border:none;color:var(--text);}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:160px 0 96px;
+  position:relative;
+  display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;
+}
+.hero-title{font-size:clamp(40px,6vw,64px);line-height:1.02;margin:14px 0 18px;}
+.hero-title em{font-style:normal;color:var(--accent);}
+.hero-sub{color:var(--muted);font-size:17px;max-width:480px;margin-bottom:32px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-graphic{position:relative;}
+.dash-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px;box-shadow:0 30px 60px -30px rgba(0,0,0,.6);
+}
+.dash-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.dash-head .eyebrow{color:var(--accent-2);}
+.dash-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(74,222,156,.15);}
+.bars{display:flex;align-items:flex-end;gap:10px;height:140px;}
+.bar{flex:1;background:linear-gradient(180deg,var(--accent-2),transparent);border-radius:6px 6px 0 0;transform:scaleY(0);transform-origin:bottom;animation:grow 1.1s cubic-bezier(.2,.8,.2,1) forwards;}
+.bar:nth-child(1){height:38%;animation-delay:.05s;}
+.bar:nth-child(2){height:64%;animation-delay:.15s;background:linear-gradient(180deg,var(--accent),transparent);}
+.bar:nth-child(3){height:48%;animation-delay:.25s;}
+.bar:nth-child(4){height:88%;animation-delay:.35s;background:linear-gradient(180deg,var(--accent),transparent);}
+.bar:nth-child(5){height:56%;animation-delay:.45s;}
+.bar:nth-child(6){height:72%;animation-delay:.55s;}
+@keyframes grow{to{transform:scaleY(1);}}
+.dash-foot{display:flex;justify-content:space-between;margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+/* ---------- about ---------- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.about-grid p{color:var(--muted);font-size:16px;}
+.stat-list{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px;}
+.stat .num{font-family:var(--display);font-size:28px;color:var(--accent);}
+.stat .lbl{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;padding-left:28px;border-left:1px solid var(--line);}
+.tl-item{position:relative;padding-bottom:36px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::before{content:'';position:absolute;left:-33px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(245,185,66,.15);}
+.tl-year{font-family:var(--mono);font-size:12px;color:var(--accent-2);}
+.tl-title{font-family:var(--display);font-size:19px;margin:4px 0 4px;}
+.tl-desc{color:var(--muted);font-size:14px;}
+
+/* ---------- projects ---------- */
+.project-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  display:grid;grid-template-columns:.9fr 1.1fr;overflow:hidden;
+}
+.project-visual{background:var(--panel-2);padding:32px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--line);}
+.project-body{padding:32px;}
+.project-body .eyebrow{color:var(--accent-2);}
+.project-body h3{font-size:22px;margin:8px 0 12px;}
+.project-list{list-style:none;color:var(--muted);font-size:14px;display:grid;gap:8px;margin-top:16px;}
+.project-list li{padding-left:18px;position:relative;}
+.project-list li::before{content:'—';position:absolute;left:0;color:var(--accent);}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.tag{font-family:var(--mono);font-size:11px;padding:5px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);}
+
+/* ---------- skills ---------- */
+.skill-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.skill-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
+.skill-card .eyebrow{color:var(--accent-2);margin-bottom:14px;display:block;}
+.skill-card ul{list-style:none;display:grid;gap:10px;}
+.skill-card li{font-size:14px;color:var(--text);display:flex;align-items:center;gap:10px;}
+.skill-card li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+/* ---------- contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+.social-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;}
+.social-btn{
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--muted);
+}
+.social-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+.field input,.field textarea{
+  width:100%;background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:13px 14px;color:var(--text);font-family:var(--body);font-size:14px;transition:border-color .2s;
+}
+.field input:focus,.field textarea:focus{border-color:var(--accent-2);}
+.field textarea{resize:vertical;min-height:110px;}
+.field.error input,.field.error textarea{border-color:var(--danger);}
+.err-msg{font-size:12px;color:var(--danger);margin-top:6px;display:none;}
+.field.error .err-msg{display:block;}
+.form-status{font-size:14px;margin-top:14px;display:none;font-family:var(--mono);}
+.form-status.show{display:block;}
+.form-status.ok{color:var(--ok);}
+.form-status.bad{color:var(--danger);}
+
+footer{border-top:1px solid var(--line);padding:32px 0;text-align:center;color:var(--muted);font-size:13px;}
+
+/* ---------- modal ---------- */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(6,9,17,.7);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  width:100%;max-width:400px;padding:32px;position:relative;
+}
+.modal-close{position:absolute;top:18px;right:18px;background:none;border:none;color:var(--muted);font-size:20px;}
+.modal h3{font-size:22px;margin-bottom:6px;}
+.modal .modal-sub{color:var(--muted);font-size:13px;margin-bottom:20px;}
+.tabs{display:flex;gap:4px;background:var(--panel-2);border-radius:10px;padding:4px;margin-bottom:20px;}
+.tab-btn{flex:1;padding:8px;border:none;background:transparent;border-radius:8px;color:var(--muted);font-size:13px;font-weight:600;}
+.tab-btn.active{background:var(--accent);color:#1A1200;}
+.mode-toggle{display:flex;gap:16px;margin-bottom:16px;}
+.mode-toggle label{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;}
+.auth-panel{display:none;}
+.auth-panel.active{display:block;}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;padding-top:140px;}
+  .about-grid,.contact-grid{grid-template-columns:1fr;}
+  .project-card{grid-template-columns:1fr;}
+  .project-visual{border-right:none;border-bottom:1px solid var(--line);}
+  .skill-groups{grid-template-columns:1fr;}
+  .nav-links{position:fixed;top:72px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;padding:20px 24px;gap:18px;display:none;}
+  .nav-links.open{display:flex;}
+  .menu-toggle{display:block;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#home" class="logo">AMIT<span>.</span>CHANDLA</a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <button class="btn btn-solid" id="openAuth">Sign In</button>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero wrap" id="home">
+    <div>
+      <span class="eyebrow">// Data Analyst & AI Learner</span>
+      <h1 class="hero-title">Turning raw data into <em>clear decisions.</em></h1>
+      <p class="hero-sub">I'm Amit Chandla, based in Haryana, India — learning AI-assisted data analysis, prompt engineering and front-end development, and looking for a Data Analyst Intern role where I can put it to work.</p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-solid">View Projects</a>
+        <a href="#contact" class="btn">Get in Touch</a>
+      </div>
+    </div>
+    <div class="hero-graphic">
+      <div class="dash-card">
+        <div class="dash-head">
+          <span class="eyebrow">Skill Signal</span>
+          <span class="dash-dot"></span>
+        </div>
+        <div class="bars">
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </div>
+        <div class="dash-foot">
+          <span>DATA · AI · WEB</span>
+          <span>LIVE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section wrap" id="about">
+    <div class="section-head">
+      <span class="eyebrow">About</span>
+      <h2>What I do</h2>
+    </div>
+    <div class="about-grid">
+      <p>I'm a data analysis &amp; AI enthusiast currently building practical skills at Bharat AI Academy — hands-on with AI tools, prompt engineering and web development. I like taking messy data and AI workflows and turning them into something clean, useful and easy to understand. Alongside this, I'm completing a Diploma in Cyber Security at Chaudhary Bansi Lal University (CBLU), Bhiwani.</p>
+      <div class="stat-list">
+        <div class="stat"><div class="num">6+</div><div class="lbl">AI Tools Used</div></div>
+        <div class="stat"><div class="num">EDA</div><div class="lbl">To Dashboards</div></div>
+        <div class="stat"><div class="num">HTML/CSS</div><div class="lbl">Front-End Build</div></div>
+        <div class="stat"><div class="num">Intern</div><div class="lbl">Role Seeking</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section wrap" id="education">
+    <div class="section-head">
+      <span class="eyebrow">Background</span>
+      <h2>Education</h2>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <span class="tl-year">2025 – 2026 · In Progress</span>
+        <div class="tl-title">Diploma in Cyber Security</div>
+        <div class="tl-desc">Chaudhary Bansi Lal University (CBLU), Bhiwani</div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">2021</span>
+        <div class="tl-title">12th — Arts Stream</div>
+        <div class="tl-desc">HBSE Board · 80%</div>
+      </div>
+      <div class="tl-item">
+        <span class="tl-year">2019</span>
+        <div class="tl-title">10th</div>
+        <div class="tl-desc">HBSE Board</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="section wrap" id="projects">
+    <div class="section-head">
+      <span class="eyebrow">Selected Work</span>
+      <h2>Projects</h2>
+    </div>
+    <div class="project-card">
+      <div class="project-visual">
+        <svg width="220" height="180" viewBox="0 0 220 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="200" height="160" rx="10" fill="#0B1220" stroke="#233252"/>
+          <circle cx="28" cy="26" r="3" fill="#F26B6B"/><circle cx="38" cy="26" r="3" fill="#F5B942"/><circle cx="48" cy="26" r="3" fill="#4ADE9C"/>
+          <rect x="20" y="42" width="80" height="10" rx="3" fill="#5B8DEF"/>
+          <rect x="20" y="60" width="180" height="34" rx="6" fill="#16213A"/>
+          <rect x="20" y="60" width="60" height="34" rx="6" fill="#F5B942" opacity="0.85"/>
+          <rect x="20" y="102" width="55" height="55" rx="6" fill="#16213A"/>
+          <rect x="82" y="102" width="55" height="55" rx="6" fill="#16213A"/>
+          <rect x="144" y="102" width="56" height="55" rx="6" fill="#16213A"/>
+          <circle cx="47" cy="122" r="10" fill="#5B8DEF"/>
+          <rect x="30" y="138" width="35" height="6" rx="3" fill="#233252"/>
+          <circle cx="109" cy="122" r="10" fill="#F5B942"/>
+          <rect x="92" y="138" width="35" height="6" rx="3" fill="#233252"/>
+          <circle cx="172" cy="122" r="10" fill="#4ADE9C"/>
+          <rect x="154" y="138" width="35" height="6" rx="3" fill="#233252"/>
+        </svg>
+      </div>
+      <div class="project-body">
+        <span class="eyebrow">Bharat AI Academy · Jul 2026</span>
+        <h3>AI-Powered Clinic Website</h3>
+        <p style="color:var(--muted);font-size:14px;">A responsive clinic website built during practical training in Rohtak, Haryana — designed for a clear patient experience from booking to visit.</p>
+        <ul class="project-list">
+          <li>Doctor profiles, appointment booking, treatment info and a validated contact form</li>
+          <li>AI tools used for UI design, content generation, code assistance and debugging</li>
+          <li>Built with HTML, CSS and AI-assisted coding workflows</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">AI-Assisted Dev</span><span class="tag">Prompt Engineering</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="section wrap" id="skills">
+    <div class="section-head">
+      <span class="eyebrow">Toolkit</span>
+      <h2>Skills</h2>
+    </div>
+    <div class="skill-groups">
+      <div class="skill-card">
+        <span class="eyebrow">AI & Prompting</span>
+        <ul>
+          <li>ChatGPT (Advanced Data Analysis)</li>
+          <li>Claude AI / Claude Code</li>
+          <li>Google Gemini</li>
+          <li>Microsoft Copilot</li>
+          <li>Perplexity AI</li>
+          <li>AI Prompt Engineering</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <span class="eyebrow">Data Analytics</span>
+        <ul>
+          <li>Power BI</li>
+          <li>Data Cleaning & Transformation</li>
+          <li>Exploratory Data Analysis</li>
+          <li>Data Visualization</li>
+          <li>Dashboard Creation</li>
+          <li>Data Storytelling</li>
+        </ul>
+      </div>
+      <div class="skill-card">
+        <span class="eyebrow">Tools & Thinking</span>
+        <ul>
+          <li>Cursor</li>
+          <li>Cloudflare</li>
+          <li>Critical Thinking</li>
+          <li>Problem Solving</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section wrap" id="contact">
+    <div class="section-head">
+      <span class="eyebrow">Let's Talk</span>
+      <h2>Contact</h2>
+      <p class="section-sub">Send a message and I'll get back to you — or reach out directly through any of these.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="social-row">
+          <a class="social-btn" href="https://wa.me/917015559332" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.02 2C6.5 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.1-1.33A9.94 9.94 0 0 0 12.02 22C17.5 22 22 17.52 22 12S17.5 2 12.02 2zm0 18.1c-1.7 0-3.28-.5-4.6-1.36l-.33-.2-3.03.8.81-2.95-.21-.31A8.07 8.07 0 0 1 3.9 12c0-4.47 3.65-8.1 8.12-8.1s8.12 3.63 8.12 8.1-3.65 8.1-8.12 8.1zm4.44-6.07c-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.78.95-.14.16-.29.18-.53.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.33-.76-1.82-.2-.48-.4-.42-.55-.42-.14 0-.3-.02-.46-.02-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28z"/></svg>
+          </a>
+          <a class="social-btn" href="https://instagram.com/amitharyana0001" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a class="social-btn" href="https://github.com/dashboard" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.28-1.7-1.28-1.7-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.15 0 1.55-.01 2.8-.01 3.18 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5z"/></svg>
+          </a>
+          <a class="social-btn" href="https://www.linkedin.com/in/amit-chandla" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          </a>
+        </div>
+        <p style="color:var(--muted);font-size:13px;margin-top:18px;">Tap an icon above to message directly on WhatsApp, DM on Instagram, or view my GitHub / LinkedIn.</p>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="field" id="f-name">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your full name">
+          <div class="err-msg">Please enter a name (at least 2 letters).</div>
+        </div>
+        <div class="field" id="f-phone">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number">
+          <div class="err-msg">Please enter a valid 10-digit mobile number.</div>
+        </div>
+        <div class="field" id="f-email">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com">
+          <div class="err-msg">Please enter a valid email address.</div>
+        </div>
+        <div class="field" id="f-message">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="What would you like to say?"></textarea>
+          <div class="err-msg">Message should be at least 10 characters.</div>
+        </div>
+        <button type="submit" class="btn btn-solid" style="width:100%;justify-content:center;">Send Message</button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 Amit Chandla. Built with data, AI tools, and a lot of debugging.</div>
+</footer>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authOverlay">
+  <div class="modal">
+    <button class="modal-close" id="closeAuth" aria-label="Close">✕</button>
+    <h3 id="authHeading">Welcome</h3>
+    <p class="modal-sub" id="authSub">Sign in to continue.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="login">Log In</button>
+      <button class="tab-btn" data-tab="signup">Sign Up</button>
+    </div>
+    <div class="mode-toggle">
+      <label><input type="radio" name="authMode" value="email" checked> Email</label>
+      <label><input type="radio" name="authMode" value="phone"> Phone</label>
+    </div>
+
+    <!-- EMAIL PANEL -->
+    <div class="auth-panel active" id="panel-email">
+      <div class="field" id="f-authEmail">
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" placeholder="you@example.com">
+        <div class="err-msg">Enter a valid email.</div>
+      </div>
+      <div class="field" id="f-authPass">
+        <label for="authPass">Password</label>
+        <input type="password" id="authPass" placeholder="Min 6 characters">
+        <div class="err-msg">Password must be at least 6 characters.</div>
+      </div>
+      <button class="btn btn-solid" id="emailSubmit" style="width:100%;justify-content:center;">Log In</button>
+    </div>
+
+    <!-- PHONE PANEL -->
+    <div class="auth-panel" id="panel-phone">
+      <div class="field" id="f-authPhone">
+        <label for="authPhone">Phone Number</label>
+        <input type="tel" id="authPhone" placeholder="10-digit mobile number">
+        <div class="err-msg">Enter a valid 10-digit number.</div>
+      </div>
+      <button class="btn btn-solid" id="sendOtp" style="width:100%;justify-content:center;">Send OTP</button>
+      <div class="field" id="f-authOtp" style="display:none;margin-top:14px;">
+        <label for="authOtp">Enter OTP</label>
+        <input type="text" id="authOtp" placeholder="6-digit code">
+        <div class="err-msg">Enter the 6-digit code.</div>
+      </div>
+      <button class="btn btn-solid" id="verifyOtp" style="width:100%;justify-content:center;display:none;margin-top:10px;">Verify & Continue</button>
+    </div>
+
+    <div class="form-status" id="authStatus"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   TODO: SUPABASE — paste your own project credentials here
+   ============================================================ */
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY";
+
+let supabase = null;
+try{
+  if(!SUPABASE_URL.includes("YOUR-PROJECT")){
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+}catch(e){ console.warn("Supabase not configured yet:", e); }
+
+/* ---------- mobile nav ---------- */
+document.getElementById('menuToggle').addEventListener('click', ()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click', ()=> document.getElementById('navLinks').classList.remove('open'));
+});
+
+/* ---------- validation helpers ---------- */
+function setError(fieldId, isError){
+  const el = document.getElementById(fieldId);
+  if(el) el.classList.toggle('error', isError);
+}
+const isValidName = v => /^[A-Za-z\s]{2,}$/.test(v.trim());
+const isValidPhone = v => /^[6-9]\d{9}$/.test(v.trim());
+const isValidEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+const isValidMessage = v => v.trim().length >= 10;
+
+/* ---------- contact form ---------- */
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+
+contactForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const email = document.getElementById('email').value;
+  const message = document.getElementById('message').value;
+
+  const nameOk = isValidName(name);
+  const phoneOk = isValidPhone(phone);
+  const emailOk = isValidEmail(email);
+  const msgOk = isValidMessage(message);
+
+  setError('f-name', !nameOk);
+  setError('f-phone', !phoneOk);
+  setError('f-email', !emailOk);
+  setError('f-message', !msgOk);
+
+  if(!(nameOk && phoneOk && emailOk && msgOk)){
+    formStatus.textContent = "Please fix the highlighted fields.";
+    formStatus.className = "form-status show bad";
+    return;
+  }
+
+  formStatus.textContent = "Sending...";
+  formStatus.className = "form-status show";
+
+  if(!supabase){
+    formStatus.textContent = "Form validated ✓ — connect Supabase (see code comments) to actually save messages.";
+    formStatus.className = "form-status show ok";
+    return;
+  }
+
+  const { error } = await supabase.from('contact_messages').insert([{
+    name: name.trim(), phone: phone.trim(), email: email.trim(), message: message.trim()
+  }]);
+
+  if(error){
+    formStatus.textContent = "Something went wrong. Please try again.";
+    formStatus.className = "form-status show bad";
+  }else{
+    formStatus.textContent = "Message sent — thank you!";
+    formStatus.className = "form-status show ok";
+    contactForm.reset();
+  }
+});
+
+/* live re-validation once a field has been touched */
+['name','phone','email','message'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', (e)=>{
+    const map = {name:isValidName, phone:isValidPhone, email:isValidEmail, message:isValidMessage};
+    if(document.getElementById('f-'+id).classList.contains('error')){
+      setError('f-'+id, !map[id](e.target.value));
+    }
+  });
+});
+
+/* ---------- auth modal ---------- */
+const authOverlay = document.getElementById('authOverlay');
+const openAuth = document.getElementById('openAuth');
+const closeAuth = document.getElementById('closeAuth');
+const authHeading = document.getElementById('authHeading');
+const authSub = document.getElementById('authSub');
+const authStatus = document.getElementById('authStatus');
+let authTab = 'login';
+
+openAuth.addEventListener('click', ()=> authOverlay.classList.add('show'));
+closeAuth.addEventListener('click', ()=> authOverlay.classList.remove('show'));
+authOverlay.addEventListener('click', (e)=>{ if(e.target === authOverlay) authOverlay.classList.remove('show'); });
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    authTab = btn.dataset.tab;
+    authHeading.textContent = authTab === 'login' ? 'Welcome back' : 'Create account';
+    authSub.textContent = authTab === 'login' ? 'Sign in to continue.' : 'Sign up with email or phone.';
+    document.getElementById('emailSubmit').textContent = authTab === 'login' ? 'Log In' : 'Sign Up';
+    authStatus.className = 'form-status';
+  });
+});
+
+document.querySelectorAll('input[name="authMode"]').forEach(r=>{
+  r.addEventListener('change', (e)=>{
+    document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('panel-' + e.target.value).classList.add('active');
+    authStatus.className = 'form-status';
+  });
+});
+
+function requireSupabase(){
+  if(!supabase){
+    authStatus.textContent = "Connect your Supabase project first — see the setup comment at the top of the code.";
+    authStatus.className = "form-status show bad";
+    return false;
+  }
+  return true;
+}
+
+/* email login / sign up */
+document.getElementById('emailSubmit').addEventListener('click', async ()=>{
+  const email = document.getElementById('authEmail').value;
+  const pass = document.getElementById('authPass').value;
+  const emailOk = isValidEmail(email);
+  const passOk = pass.length >= 6;
+  setError('f-authEmail', !emailOk);
+  setError('f-authPass', !passOk);
+  if(!(emailOk && passOk)) return;
+  if(!requireSupabase()) return;
+
+  authStatus.textContent = "Please wait...";
+  authStatus.className = "form-status show";
+
+  const action = authTab === 'login'
+    ? supabase.auth.signInWithPassword({ email, password: pass })
+    : supabase.auth.signUp({ email, password: pass });
+
+  const { error } = await action;
+  if(error){
+    authStatus.textContent = error.message;
+    authStatus.className = "form-status show bad";
+  }else{
+    authStatus.textContent = authTab === 'login' ? "Logged in!" : "Account created — check your inbox to confirm.";
+    authStatus.className = "form-status show ok";
+  }
+});
+
+/* phone OTP login / sign up */
+document.getElementById('sendOtp').addEventListener('click', async ()=>{
+  const phone = document.getElementById('authPhone').value;
+  const phoneOk = isValidPhone(phone);
+  setError('f-authPhone', !phoneOk);
+  if(!phoneOk) return;
+  if(!requireSupabase()) return;
+
+  authStatus.textContent = "Sending OTP...";
+  authStatus.className = "form-status show";
+
+  const { error } = await supabase.auth.signInWithOtp({ phone: "+91" + phone.trim() });
+  if(error){
+    authStatus.textContent = error.message;
+    authStatus.className = "form-status show bad";
+  }else{
+    authStatus.textContent = "OTP sent — check your SMS.";
+    authStatus.className = "form-status show ok";
+    document.getElementById('f-authOtp').style.display = 'block';
+    document.getElementById('verifyOtp').style.display = 'flex';
+  }
+});
+
+document.getElementById('verifyOtp').addEventListener('click', async ()=>{
+  const phone = document.getElementById('authPhone').value;
+  const otp = document.getElementById('authOtp').value;
+  const otpOk = /^\d{6}$/.test(otp.trim());
+  setError('f-authOtp', !otpOk);
+  if(!otpOk) return;
+  if(!requireSupabase()) return;
+
+  const { error } = await supabase.auth.verifyOtp({ phone: "+91" + phone.trim(), token: otp.trim(), type: 'sms' });
+  if(error){
+    authStatus.textContent = error.message;
+    authStatus.className = "form-status show bad";
+  }else{
+    authStatus.textContent = "Verified — you're logged in!";
+    authStatus.className = "form-status show ok";
+  }
+});
+</script>
+</body>
+</html>
